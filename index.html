@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Indian Flag Hoisting By Dhruvang</title>
+  <style>
+    /* ========= CONFIG ========= */
+    :root {
+      --flag-width: 360px;         /* width of flag */
+      --stripe-height: 80px;       /* each stripe height */
+      --flag-height: calc(3 * var(--stripe-height));
+      --pole-height: 420px;        /* pole height */
+
+      --hoist-time: 4s;            /* hoist duration */
+      --wave-time: 3s;             /* wave duration */
+
+      /* distance the flag travels upward while hoisting */
+      --hoist-distance: calc(var(--pole-height) - var(--flag-height) - 20px);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(#cfe9ff, #eef7ff);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    /* ========= STAGE ========= */
+    .scene {
+      position: relative;
+      width: calc(var(--flag-width) + 80px);
+      height: var(--pole-height);
+      perspective: 1000px; /* subtle 3D for waving */
+    }
+
+    /* ========= POLE ========= */
+    .pole {
+      position: absolute;
+      left: 20px;
+      bottom: 0;
+      width: 12px;
+      height: var(--pole-height);
+      background: linear-gradient(#9aa, #667);
+      border-radius: 8px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,.18);
+    }
+    .pole::before { /* finial */
+      content: "";
+      position: absolute;
+      top: -12px; left: 50%; transform: translateX(-50%);
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #d6b777;
+      box-shadow: 0 3px 6px rgba(0,0,0,.25);
+    }
+    .pole::after { /* base */
+      content: "";
+      position: absolute;
+      bottom: -8px; left: 50%; transform: translateX(-50%);
+      width: 56px; height: 16px; border-radius: 8px;
+      background: #555;
+    }
+    .rope {
+      position: absolute;
+      left: 30px;
+      top: 0;
+      width: 2px;
+      height: calc(var(--pole-height) - 10px);
+      background: repeating-linear-gradient(#e6e6e6 0 6px, #bfbfbf 6px 12px);
+      opacity: .8;
+    }
+
+    /* ========= HOISTING GROUP ========= */
+    .flag-holder {
+      position: absolute;
+      top: 0;           /* anchor to top so translateY hoists upward */
+      left: 36px;       /* gap from pole */
+      transform: translateY(var(--hoist-distance));
+      animation: hoist var(--hoist-time) ease-out forwards;
+      will-change: transform;
+    }
+    @keyframes hoist { to { transform: translateY(0); } }
+
+    /* ========= FLAG ========= */
+    .flag {
+      position: relative;
+      width: var(--flag-width);
+      height: var(--flag-height);
+      transform-origin: left center;
+      filter: drop-shadow(0 6px 8px rgba(0,0,0,.15));
+      /* starts waving after hoist completes */
+      animation: wave var(--wave-time) ease-in-out infinite;
+      animation-delay: var(--hoist-time);
+    }
+    @keyframes wave {
+      0%, 100% { transform: rotateY(0deg) translateX(0); }
+      50%      { transform: rotateY(10deg) translateX(6px); }
+    }
+
+    .stripe { width: 100%; height: var(--stripe-height); }
+    .saffron { background: #FF9933; }
+    .white   { background: #FFFFFF; position: relative; }
+    .green   { background: #138808; }
+
+    /* ========= ASHOKA CHAKRA ========= */
+    /* FIX: separate centering (wrapper) and rotation (inner) so transforms don't fight */
+    .chakra-wrap {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%); /* only centering here */
+      width: calc(var(--stripe-height) * 0.95);
+      aspect-ratio: 1 / 1;
+    }
+
+    .chakra {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid #23288c;
+      display: grid; place-items: center;
+      background: radial-gradient(circle at center, transparent 58%, #23288c 58% 60%, transparent 60%);
+      /* rotate ONLY the inner circle */
+      animation: spinChakra 10s linear infinite;
+      animation-delay: var(--hoist-time);
+      will-change: transform;
+    }
+    @keyframes spinChakra { to { transform: rotate(360deg); } }
+
+    .spokes { position: absolute; inset: 0; }
+    .spoke {
+      position: absolute; top: 50%; left: 50%;
+      width: 48%; height: 2px; background: #23288c;
+      transform-origin: left center;
+    }
+    /* 24 spokes at 15° increments */
+    .spoke:nth-child(1)  { transform: rotate(0deg); }
+    .spoke:nth-child(2)  { transform: rotate(15deg); }
+    .spoke:nth-child(3)  { transform: rotate(30deg); }
+    .spoke:nth-child(4)  { transform: rotate(45deg); }
+    .spoke:nth-child(5)  { transform: rotate(60deg); }
+    .spoke:nth-child(6)  { transform: rotate(75deg); }
+    .spoke:nth-child(7)  { transform: rotate(90deg); }
+    .spoke:nth-child(8)  { transform: rotate(105deg); }
+    .spoke:nth-child(9)  { transform: rotate(120deg); }
+    .spoke:nth-child(10) { transform: rotate(135deg); }
+    .spoke:nth-child(11) { transform: rotate(150deg); }
+    .spoke:nth-child(12) { transform: rotate(165deg); }
+    .spoke:nth-child(13) { transform: rotate(180deg); }
+    .spoke:nth-child(14) { transform: rotate(195deg); }
+    .spoke:nth-child(15) { transform: rotate(210deg); }
+    .spoke:nth-child(16) { transform: rotate(225deg); }
+    .spoke:nth-child(17) { transform: rotate(240deg); }
+    .spoke:nth-child(18) { transform: rotate(255deg); }
+    .spoke:nth-child(19) { transform: rotate(270deg); }
+    .spoke:nth-child(20) { transform: rotate(285deg); }
+    .spoke:nth-child(21) { transform: rotate(300deg); }
+    .spoke:nth-child(22) { transform: rotate(315deg); }
+    .spoke:nth-child(23) { transform: rotate(330deg); }
+    .spoke:nth-child(24) { transform: rotate(345deg); }
+
+    /* Accessibility: reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      .flag-holder, .flag, .chakra { animation: none !important; }
+      .flag-holder { transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="pole"></div>
+    <div class="rope"></div>
+
+    <div class="flag-holder">
+      <div class="flag">
+        <div class="stripe saffron"></div>
+        <div class="stripe white">
+          <div class="chakra-wrap" aria-label="Ashoka Chakra – 24 spokes">
+            <div class="chakra">
+              <div class="spokes">
+                <div class="spoke"></div><div class="spoke"></div><div class="spoke"></div><div class="spoke"></div>
+                <div class="spoke"></div><div class="spoke"></div><div class="spoke"></div><div class="spoke"></div>
+                <div class="spoke"></div><div class="spoke"></div><div class="spoke"></div><div class="spoke"></div>
+                <div class="spoke"></div><div class="spoke"></div><div class="spoke"></div><div class="spoke"></div>
+                <div class="spoke"></div><div class="spoke"></div><div class="spoke"></div><div class="spoke"></div>
+                <div class="spoke"></div><div class="spoke"></div><div class="spoke"></div><div class="spoke"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="stripe green"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
